@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>upskilling_plan.py — Python for Data Analysis &amp; BI Analytics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#10151c; --surface:#1a222c; --surface-2:#212b37; --surface-3:#283445;
+    --rule:#2b3542; --text:#e9e6de; --text-dim:#93a0af; --text-faint:#5c6774;
+    --amber:#d9a94e; --amber-soft:rgba(217,169,78,.14);
+    --green:#4f9a6e; --green-soft:rgba(79,154,110,.14);
+    --rust:#c1654a;
+    --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
+    --sans:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0; background:var(--ink); color:var(--text); font-family:var(--sans);
+    line-height:1.55; font-size:16px; padding:0 0 4rem;
+  }
+  a{color:var(--amber);}
+  a:hover{color:#eec36e;}
+  .wrap{max-width:760px; margin:0 auto; padding:0 1.1rem;}
+  code{
+    font-family:var(--mono); background:var(--surface-3); color:#f2c879;
+    padding:.1rem .35rem; border-radius:4px; font-size:.88em;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{padding:2.6rem 0 1.6rem; border-bottom:1px solid var(--rule);}
+  .hero-comment{
+    font-family:var(--mono); color:var(--text-faint); font-size:.82rem; margin:0 0 .6rem;
+  }
+  .hero-title{
+    font-family:var(--mono); font-weight:600; letter-spacing:-.01em;
+    font-size:clamp(1.5rem,5.5vw,2.15rem); margin:0 0 .8rem; color:var(--text);
+  }
+  .hero-title .ext{color:var(--amber);}
+  .hero-sub{color:var(--text-dim); font-size:.98rem; max-width:56ch; margin:0 0 .4rem;}
+  .hero-cost{
+    display:inline-block; margin-top:.9rem; font-family:var(--mono); font-size:.78rem;
+    color:var(--green); background:var(--green-soft); border:1px solid rgba(79,154,110,.35);
+    padding:.35rem .65rem; border-radius:5px;
+  }
+  .hero-howto{color:var(--text-faint); font-size:.85rem; margin-top:1.1rem;}
+
+  .stats-strip{
+    margin-top:1.4rem; border:1px solid var(--rule); background:var(--surface);
+    border-radius:8px; padding:.9rem 1rem;
+  }
+  #hero-stats{
+    display:flex; flex-wrap:wrap; gap:.35rem 1rem; font-family:var(--mono);
+    font-size:.82rem; color:var(--text-dim); margin-bottom:.6rem;
+  }
+  #hero-stats b{color:var(--text); font-weight:600;}
+  .bar-track{height:8px; background:var(--surface-3); border-radius:4px; overflow:hidden;}
+  .bar-fill{
+    height:100%; background:linear-gradient(90deg,var(--amber),var(--green));
+    width:0%; transition:width .3s ease;
+  }
+
+  /* ---------- PHASES ---------- */
+  #course-root{margin-top:1.8rem;}
+  .phase{margin-bottom:.65rem; border:1px solid var(--rule); border-radius:9px; overflow:hidden; background:var(--surface);}
+  .phase-heading{margin:0;}
+  .phase-head{
+    width:100%; display:flex; align-items:center; gap:.7rem; text-align:left;
+    background:transparent; border:none; color:var(--text); cursor:pointer;
+    padding:.95rem 1rem; font-family:var(--sans);
+  }
+  .phase-head:hover{background:var(--surface-2);}
+  .phase-num{font-family:var(--mono); color:var(--text-faint); font-size:.85rem; min-width:1.6em;}
+  .phase-title-text{font-weight:600; font-size:1rem; flex:1;}
+  .phase-count{font-family:var(--mono); font-size:.78rem; color:var(--text-dim); white-space:nowrap;}
+  .chevron{color:var(--text-faint); font-size:.8rem; width:1em;}
+  .phase-bar-track{height:3px; background:var(--surface-3);}
+  .phase-bar-fill{height:100%; background:var(--amber); width:0%; transition:width .3s ease;}
+  .phase-body{padding:0 1rem 1.1rem;}
+  .phase-blurb{color:var(--text-dim); font-size:.92rem; margin:.9rem 0 .3rem; max-width:60ch;}
+  .phase-hours{
+    font-family:var(--mono); color:var(--text-faint); font-size:.76rem; margin:0 0 1rem;
+    text-transform:uppercase; letter-spacing:.04em;
+  }
+
+  /* ---------- CELLS ---------- */
+  .cells{display:flex; flex-direction:column; gap:.6rem;}
+  .cell{
+    display:flex; align-items:stretch; border:1px solid var(--rule); border-left:3px solid var(--amber);
+    border-radius:7px; background:var(--surface-2); transition:border-color .15s ease, background .15s ease;
+  }
+  .cell.done{border-left-color:var(--green); background:rgba(79,154,110,.06);}
+  .gutter-btn{
+    font-family:var(--mono); font-size:.82rem; color:var(--amber); background:transparent;
+    border:none; border-right:1px solid var(--rule); cursor:pointer; padding:1rem .6rem;
+    white-space:nowrap; align-self:stretch; min-width:64px;
+  }
+  .gutter-btn:hover{background:var(--amber-soft);}
+  .cell.done .gutter-btn{color:var(--green);}
+  .cell.done .gutter-btn:hover{background:var(--green-soft);}
+  .mark{display:inline-block; width:1ch; text-align:center;}
+  .cell-body{padding:.9rem 1rem .95rem; flex:1; min-width:0;}
+  .cell-title{font-size:.98rem; font-weight:600; margin:0 0 .5rem; color:var(--text);}
+  .res{font-size:.86rem; margin:.3rem 0; color:var(--text-dim); display:flex; gap:.45rem; flex-wrap:wrap;}
+  .res-tag{
+    font-family:var(--mono); font-size:.68rem; text-transform:uppercase; letter-spacing:.05em;
+    color:var(--text-faint); border:1px solid var(--rule); border-radius:3px; padding:.05rem .35rem;
+    height:fit-content; margin-top:.15rem;
+  }
+  .res-source{color:var(--text-faint);}
+  .practice{font-size:.92rem; margin:.6rem 0 0; color:var(--text);}
+  .practice-tag{font-family:var(--mono); color:var(--amber); font-size:.78rem; margin-right:.3rem;}
+  .cell.done .practice-tag{color:var(--green);}
+
+  /* ---------- LOG + FOOTER ---------- */
+  .log-section{margin-top:2.2rem; border-top:1px solid var(--rule); padding-top:1.6rem;}
+  .log-label{
+    font-family:var(--mono); font-size:.85rem; color:var(--amber); display:block; margin-bottom:.5rem;
+  }
+  .log-hint{color:var(--text-faint); font-size:.82rem; margin:0 0 .7rem;}
+  textarea{
+    width:100%; min-height:130px; background:var(--surface); color:var(--text);
+    border:1px solid var(--rule); border-radius:8px; padding:.8rem; font-family:var(--sans);
+    font-size:.94rem; resize:vertical; line-height:1.5;
+  }
+  textarea:focus{outline:2px solid var(--amber); outline-offset:1px;}
+  #storage-note{
+    display:none; margin-top:1.6rem; font-size:.85rem; color:var(--rust);
+    background:rgba(193,101,74,.1); border:1px solid rgba(193,101,74,.3); border-radius:7px; padding:.7rem .9rem;
+  }
+  footer{margin-top:2.4rem; border-top:1px solid var(--rule); padding-top:1.3rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.8rem;}
+  footer p{color:var(--text-faint); font-size:.8rem; margin:0; max-width:44ch;}
+  #reset-btn{
+    font-family:var(--mono); font-size:.78rem; color:var(--text-dim); background:transparent;
+    border:1px solid var(--rule); border-radius:6px; padding:.45rem .8rem; cursor:pointer;
+  }
+  #reset-btn:hover{color:var(--rust); border-color:var(--rust);}
+
+  button:focus-visible, a:focus-visible{outline:2px solid var(--amber); outline-offset:2px;}
+  @media (prefers-reduced-motion:reduce){*{transition:none !important;}}
+  @media (max-width:480px){
+    .gutter-btn{min-width:54px; font-size:.74rem; padding:.9rem .4rem;}
+    .cell-title{font-size:.94rem;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <p class="hero-comment"># a self-paced plan — Python for Data Analysis &amp; BI Analytics (100% Python)</p>
+    <h1 class="hero-title">upskilling_plan<span class="ext">.py</span></h1>
+    <p class="hero-sub">SQL and Excel → Python, PySpark, and Python-native BI dashboards — practiced entirely in Databricks. No Power BI, no Tableau.</p>
+    <span class="hero-cost">total cost: $0 beyond what your employer already covers for Databricks</span>
+    <p class="hero-howto">Tap a phase to open it. Tap the bracket on any item to mark it done — progress saves automatically and privately to this page.</p>
+    <div class="stats-strip">
+      <div id="hero-stats"></div>
+      <div class="bar-track"><div class="bar-fill" id="hero-bar-fill"></div></div>
+    </div>
+  </header>
+
+  <main id="course-root"></main>
+
+  <section class="log-section">
+    <label class="log-label" for="learning-log"># learning_log.md</label>
+    <p class="log-hint">Notes to yourself as you go — what clicked, what to revisit, what to try at work, links to apps you deploy. Phase 0 and Phase 8 will ask you to use this.</p>
+    <textarea id="learning-log" placeholder="Start with: what do I currently do in Excel/SQL that feels slow or manual?"></textarea>
+  </section>
+
+  <div id="storage-note">Your browser is blocking local storage (common in private/incognito mode), so checks will work for this visit but won't be remembered next time. Try a normal browser window.</div>
+
+  <footer>
+    <p>Every resource here is free — Python, git and GitHub included. Streamlit and Dash are open-source Python libraries; Databricks and Streamlit Community Cloud both offer free ways to run and share what you build.</p>
+    <button id="reset-btn" type="button">Reset all progress</button>
+  </footer>
+
+</div>
+
+<script>
+/* ---------------- storage helpers ---------------- */
+const hasClaudeStorage = !!(window.storage && window.storage.get && window.storage.set);
+let hasLocalStorage = false;
+try{ const k='__pybi_test__'; window.localStorage.setItem(k,'1'); window.localStorage.removeItem(k); hasLocalStorage = true; }
+catch(e){ hasLocalStorage = false; }
+const LS_PREFIX = 'pybi-course:';
+const memoryStore = {};
+
+async function storageGet(key){
+  if(hasClaudeStorage){
+    try{ const r = await window.storage.get(key, false); return r ? r.value : null; }
+    catch(e){ return null; }
+  }
+  if(hasLocalStorage) return window.localStorage.getItem(LS_PREFIX + key);
+  return memoryStore[key] ?? null;
+}
+async function storageSet(key, value){
+  if(hasClaudeStorage){
+    try{ await window.storage.set(key, value, false); }
+    catch(e){ console.error('storage set failed', e); }
+    return;
+  }
+  if(hasLocalStorage){
+    try{ window.localStorage.setItem(LS_PREFIX + key, value); }
+    catch(e){ console.error('localStorage set failed', e); }
+    return;
+  }
+  memoryStore[key] = value;
+}
+
+/* ---------------- course data ---------------- */
+const COURSE = [
+{ id:'p0', num:'00', title:'Setup & Orientation', hours:5,
+  blurb:'Get your accounts created, your Databricks workspace open, and Python + git installed locally. Everything later in this course builds on these first few hours.',
+  cells:[
+    { id:'p0c1', title:'Get oriented in your Databricks workspace',
+      reading:[{label:'Free training & Databricks Academy access', url:'https://docs.databricks.com/aws/en/getting-started/free-training'}],
+      video:[{label:'Databricks Academy — self-paced courses', url:'https://www.databricks.com/learn/training/home'}],
+      practice:`Log in to the Databricks workspace your employer set up. Create a new notebook, run <code>print("hello")</code> in a Python cell, then run <code>SELECT * FROM samples.tpch.customer LIMIT 10;</code> in a SQL cell. Click through the Catalog panel once.` },
+    { id:'p0c4', title:'Install Python + git locally, and create a GitHub account',
+      reading:[{label:'Download Python (official)', url:'https://www.python.org/downloads/'},{label:'GitHub — Hello World guide (git + GitHub basics)', url:'https://docs.github.com/en/get-started/start-your-journey/hello-world'}],
+      video:[],
+      practice:`Install Python 3.x locally and confirm it with <code>python --version</code>. Create and activate a virtual environment for this course — <code>python -m venv course-env</code>, then activate it — so packages you install later (Phase 6) stay isolated from other projects. Install git, create a free GitHub account, and work through the Hello World guide once: create a repo, commit a change, push it.` },
+    { id:'p0c2', title:'Create a Kaggle account + a personal Databricks Free Edition account',
+      reading:[{label:'Kaggle Learn (for datasets and courses)', url:'https://www.kaggle.com/learn'},{label:'Databricks Free Edition (for personal / portfolio projects)', url:'https://docs.databricks.com/aws/en/getting-started/free-edition'}],
+      video:[],
+      practice:`Sign up for Kaggle — you'll use it from Phase 2 onward. Also sign up for Databricks Free Edition with a personal email; use that one, not your work workspace, for capstone projects and deployed apps you want to keep as your own portfolio later.` },
+    { id:'p0c3', title:'Write your starting point',
+      reading:[], video:[],
+      practice:`Open the Learning Log at the bottom of this page and write 3–4 sentences: what you currently do in Excel or SQL at work, and which parts feel slow, manual, or error-prone. You'll come back to this note in Phase 8.` }
+  ]
+},
+{ id:'p1', num:'01', title:'Python Foundations', hours:15,
+  blurb:'The core language, with every concept anchored to something you already do in a spreadsheet or a query.',
+  cells:[
+    { id:'p1c1', title:'Variables, types & f-strings',
+      reading:[{label:'freeCodeCamp — Data Analysis with Python (interactive)', url:'https://www.freecodecamp.org/learn/data-analysis-with-python'}],
+      video:[{label:'Data Analysis with Python — Full Course for Beginners', url:'https://www.youtube.com/playlist?list=PLWKjhJtqVAblvI1i46ScbKV2jH1gdL7VQ', source:'freeCodeCamp'}],
+      practice:`In a Databricks Python cell, store a few values as variables (a number, some text, a boolean) and build a one-line summary with an f-string — the Python version of a concatenated Excel cell.` },
+    { id:'p1c2', title:'Lists & dictionaries: a row, and a table, before pandas exists',
+      reading:[{label:'Same course — data structures section', url:'https://www.freecodecamp.org/learn/data-analysis-with-python'}],
+      video:[{label:'Data Analyst Bootcamp (Python section)', url:'https://www.youtube.com/watch?v=PSNXoAs2FtQ', source:'Alex the Analyst'}],
+      practice:`By hand, represent 5 rows of an "orders" table as a list of dictionaries. Loop through it and add up <code>revenue</code> — this is what pandas does in one line starting in Phase 2.` },
+    { id:'p1c3', title:'Control flow: IF, but with real power',
+      reading:[], video:[],
+      practice:`Using the list from the previous item, write an if/elif/else that tags each order "small", "medium" or "large" by revenue — the Python version of a nested Excel IF.` },
+    { id:'p1c4', title:'Functions: a formula you can name and reuse',
+      reading:[], video:[],
+      practice:`Write <code>def margin(revenue, cost): return (revenue - cost) / revenue</code> and apply it to every row in your list with a loop or a list comprehension.` },
+    { id:'p1c5', title:'Reading files & handling errors, the manual way',
+      reading:[], video:[],
+      practice:`Read a CSV with Python's built-in <code>csv</code> module — no pandas yet — and wrap the file read in a <code>try/except</code>. Notice how many lines this takes; Phase 2 cuts it to one.` },
+    { id:'p1c6', title:'Mini-project — clean a messy CSV with plain Python',
+      reading:[], video:[],
+      practice:`Upload a small messy CSV to Databricks (blank cells, inconsistent capitalization, a couple of duplicate rows — a mock expense report works well) and clean it using only what you've learned so far. Keep the file; you'll redo this in Phase 2 to feel the difference pandas makes.` }
+  ]
+},
+{ id:'p2', num:'02', title:'Pandas & NumPy', hours:23,
+  blurb:'This is where SQL fluency becomes a superpower. Every clause you already know gets a pandas name.',
+  cells:[
+    { id:'p2c1', title:'DataFrames = tables. Start here.',
+      reading:[{label:'10 minutes to pandas (official docs)', url:'https://pandas.pydata.org/docs/user_guide/10min.html'}],
+      video:[{label:'Pandas Tutorials, Part 1 onward', url:'https://www.youtube.com/playlist?list=PL-osiE80TeTsWmV9i9c58mdDCSskIFdDS', source:'Corey Schafer'}],
+      practice:`In Databricks: <code>df = spark.table("samples.tpch.customer").toPandas()</code>. Run <code>.head()</code>, <code>.info()</code> and <code>.describe()</code> and read what each one tells you.` },
+    { id:'p2c8', title:'Reading and writing Excel files',
+      reading:[{label:'pandas IO tools — Excel section (official docs)', url:'https://pandas.pydata.org/docs/user_guide/io.html'}],
+      video:[],
+      practice:`Read a multi-sheet workbook with <code>pd.read_excel("file.xlsx", sheet_name=None)</code> — it returns a dict of DataFrames, one per sheet. Combine two sheets with <code>pd.concat()</code>, then write the result back out to multiple sheets with <code>pd.ExcelWriter</code>.` },
+    { id:'p2c2', title:'SELECT, WHERE, ORDER BY → pandas',
+      reading:[{label:'Comparison with SQL (official pandas docs)', url:'https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html'}],
+      video:[],
+      practice:`Rewrite 5 SQL queries you'd normally write at work as pandas one-liners against <code>samples.tpch.orders</code> — column selection, a WHERE-style filter, an ORDER BY-style sort.` },
+    { id:'p2c3', title:'GROUP BY & aggregates → .groupby()',
+      reading:[{label:'Comparison with SQL — GROUP BY section', url:'https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html'},{label:'Kaggle Learn — Pandas', url:'https://www.kaggle.com/learn/pandas'}],
+      video:[],
+      practice:`Compute total order value by customer market segment with <code>.groupby()</code>. Before you run it, predict the SQL you'd write, then compare.` },
+    { id:'p2c4', title:'JOINs → .merge()',
+      reading:[{label:'Comparison with SQL — JOIN section', url:'https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html'}],
+      video:[],
+      practice:`Join <code>customer</code>, <code>orders</code> and <code>lineitem</code> from the TPC-H sample the way you'd write INNER/LEFT JOINs in SQL, using <code>pd.merge()</code>.` },
+    { id:'p2c5', title:'Pivot tables — the Excel move you already know',
+      reading:[{label:'pandas Getting Started — reshaping & pivot tables', url:'https://pandas.pydata.org/docs/getting_started/index.html'}],
+      video:[],
+      practice:`Build a pivot table of monthly revenue by category with <code>pd.pivot_table()</code> — same output as an Excel PivotTable, without the clicking.` },
+    { id:'p2c9', title:'Dates & time series — the MoM/YoY moves',
+      reading:[{label:'Time series / date functionality (official pandas docs)', url:'https://pandas.pydata.org/docs/user_guide/timeseries.html'}],
+      video:[],
+      practice:`Convert an order-date column with <code>pd.to_datetime()</code>, then pull out <code>.dt.year</code> and <code>.dt.month</code>. Compute month-over-month change with <code>.resample('ME').sum().pct_change()</code>, and smooth it with a 3-month rolling average using <code>.rolling(3).mean()</code>. These three lines sit behind almost every trend line on a BI dashboard.` },
+    { id:'p2c6', title:'Cleaning messy data, properly',
+      reading:[{label:'Kaggle Learn — Data Cleaning', url:'https://www.kaggle.com/learn/data-cleaning'}],
+      video:[],
+      practice:`Reopen your Phase 1 messy CSV and clean it again with <code>.dropna()</code>, <code>.fillna()</code>, <code>.drop_duplicates()</code> and <code>.str</code> methods. Compare the line count to your manual version.` },
+    { id:'p2c7', title:'Mini-project — business Q&A on a real dataset',
+      reading:[{label:'Superstore dataset (Kaggle)', url:'https://www.kaggle.com/datasets/vivek468/superstore-dataset-final'}],
+      video:[],
+      practice:`Use the built-in TPC-H sample or download the Superstore dataset. Answer 8–10 business questions purely in pandas — top customers, slowest-moving categories, monthly revenue trend, region with declining margin. Save this notebook; you'll reuse the dataset through Phase 7.` }
+  ]
+},
+{ id:'p3', num:'03', title:'Data Visualization in Python', hours:9,
+  blurb:'Turn Phase 2\u2019s tables into charts that make the answer obvious before anyone reads a number — ending in the interactive charts that power your Phase 6 dashboards.',
+  cells:[
+    { id:'p3c1', title:'matplotlib basics',
+      reading:[{label:'Kaggle Learn — Data Visualization', url:'https://www.kaggle.com/learn/data-visualization'}],
+      video:[{label:'Data Analysis with Python — visualization sections', url:'https://www.youtube.com/playlist?list=PLWKjhJtqVAblvI1i46ScbKV2jH1gdL7VQ', source:'freeCodeCamp'}],
+      practice:`Chart monthly revenue as a line chart and category revenue as a bar chart, right inside a Databricks notebook cell.` },
+    { id:'p3c2', title:'seaborn for statistical charts',
+      reading:[], video:[],
+      practice:`Build a boxplot of order value by segment and a heatmap of correlation between your numeric columns.` },
+    { id:'p3c3', title:'Plotly — interactive charts, the pandas-native way',
+      reading:[{label:'Getting started with Plotly in Python (official)', url:'https://plotly.com/python/getting-started/'}],
+      video:[],
+      practice:`Rebuild two of your charts above with Plotly Express instead — <code>px.line(...)</code> and <code>px.bar(...)</code> — and notice the free zoom, pan and hover tooltips. This is the exact charting engine you'll reuse inside a real dashboard app in Phase 6.` },
+    { id:'p3c4', title:'Chart choice & design',
+      reading:[], video:[],
+      practice:`Take one chart from before and deliberately make a worse version — wrong chart type, 3D, a rainbow palette — then fix it. The contrast teaches more than either version alone.` },
+    { id:'p3c5', title:'Mini-project — a one-page visual summary',
+      reading:[], video:[],
+      practice:`Turn your Phase 2 capstone dataset into one notebook page of 4–5 charts (mix matplotlib/seaborn and Plotly) that tell a clear story, each with a 2–3 sentence takeaway underneath.` }
+  ]
+},
+{ id:'p4', num:'04', title:'Statistics & BI Analytics Thinking', hours:8,
+  blurb:'The tool doesn\u2019t matter if you\u2019re measuring the wrong thing. This phase is about picking the right metric.',
+  cells:[
+    { id:'p4c1', title:'Descriptive statistics that actually matter',
+      reading:[], video:[],
+      practice:`Compute mean, median, standard deviation and the 90th percentile of order value. Write one sentence on why you'd report median instead of mean for a metric like deal size.` },
+    { id:'p4c2', title:'Correlation ≠ causation',
+      reading:[], video:[{label:'Data Analytics in Python — EDA & A/B Testing', url:'https://www.freecodecamp.org/news/learn-python-for-data-science-hands-on-projects-with-eda-ab-testing-business-intelligence/', source:'freeCodeCamp'}],
+      practice:`Find two correlated columns in your dataset. Write one sentence proposing a plausible confounding variable behind the correlation.` },
+    { id:'p4c3', title:'Design 5 KPIs for a real business function',
+      reading:[], video:[],
+      practice:`Pick one function — AR, procurement, headcount cost, or sales. For each of 5 KPIs, write: the name, the formula, how often it should be checked, and who'd act on it. These become the KPI cards on your Phase 6 dashboard.` },
+    { id:'p4c4', title:'A/B testing, briefly',
+      reading:[{label:'Same course — A/B testing section', url:'https://www.freecodecamp.org/news/learn-python-for-data-science-hands-on-projects-with-eda-ab-testing-business-intelligence/'}],
+      video:[],
+      practice:`Watch the course's A/B test case study and summarize the hypothesis, result, and decision in 3 bullet points.` },
+    { id:'p4c5', title:'Mini-project — a one-page insight memo',
+      reading:[], video:[],
+      practice:`Using Phase 2–3 output, write a one-page memo as if it's going to your manager: headline finding, one supporting chart, one recommended action.` }
+  ]
+},
+{ id:'p5', num:'05', title:'SQL, PySpark & the Databricks Platform', hours:21,
+  blurb:'Where your SQL fluency scales up — same logic over distributed data, plus the native tools BI teams run on before any dashboard app gets involved.',
+  cells:[
+    { id:'p5c1', title:'PySpark DataFrames — pandas\u2019 bigger sibling',
+      reading:[{label:'PySpark on Databricks — overview', url:'https://docs.databricks.com/aws/en/pyspark/'},{label:'PySpark basics (official, uses TPC-H sample data)', url:'https://docs.databricks.com/aws/en/pyspark/basics'}],
+      video:[],
+      practice:`Redo 3 of your Phase 2 pandas operations in PySpark against the full <code>samples.tpch</code> tables. Notice what's identical and what's different — nothing runs until you call <code>.display()</code> or <code>.collect()</code>, because Spark is lazy.` },
+    { id:'p5c2', title:'SQL cell, PySpark, or spark.sql() — same answer, three ways',
+      reading:[{label:'Load and transform data with Spark DataFrames', url:'https://docs.databricks.com/aws/en/getting-started/dataframes'}],
+      video:[],
+      practice:`Write the same aggregation three ways in one notebook: a <code>%sql</code> cell, the PySpark DataFrame API, and <code>spark.sql("...")</code> inside a Python cell.` },
+    { id:'p5c3', title:'Delta Lake & a tiny pipeline',
+      reading:[{label:'Databricks Academy — Lakehouse Architecture & self-paced courses', url:'https://www.databricks.com/learn/training/home'}],
+      video:[],
+      practice:`Build a 3-step pipeline on your capstone dataset: raw table → cleaned Delta table → aggregated summary Delta table. This summary table is what your Phase 6 dashboard will read from.` },
+    { id:'p5c4', title:'Databricks SQL, dashboards & Genie',
+      reading:[{label:'Databricks Academy — AI/BI for Data Analysts', url:'https://www.databricks.com/learn/training/home'}],
+      video:[],
+      practice:`Write a query against your summary table in the SQL editor, pin it to a Lakeview dashboard, then open Genie and ask it 3 natural-language questions about the same data.` },
+    { id:'p5c7', title:'Databricks Jobs — actually scheduling something',
+      reading:[{label:'Create and manage scheduled notebook jobs (official)', url:'https://docs.databricks.com/aws/en/notebooks/schedule-notebook-jobs'}],
+      video:[],
+      practice:`Open your pipeline notebook from the previous item, click Schedule in the top right, and create a job that runs it daily. Run it once manually with Run now to confirm it succeeds, then check back the next day to see the scheduled run land on its own.` },
+    { id:'p5c5', title:'Certification path (optional, mostly free to study)',
+      reading:[{label:'Databricks Certified Data Analyst Associate — free overview course', url:'https://www.databricks.com/learn/training/home'}],
+      video:[],
+      practice:`No task here — just note that the study material is free through Academy. Only the exam itself has a fee, if you decide to sit it later.` },
+    { id:'p5c6', title:'Mini-project — end-to-end pipeline + native dashboard',
+      reading:[], video:[],
+      practice:`Take your capstone dataset from raw upload through your Delta pipeline to a working Lakeview dashboard with at least 4 visuals.` }
+  ]
+},
+{ id:'p6', num:'06', title:'Python-Native BI Dashboards: Streamlit & Dash', hours:18,
+  blurb:'Build the same interactive dashboards Power BI or Tableau would give you — in nothing but Python.',
+  cells:[
+    { id:'p6c1', title:'Streamlit — your first data app',
+      reading:[{label:'Get started with Streamlit (official)', url:'https://docs.streamlit.io/get-started'},{label:'Basic concepts', url:'https://docs.streamlit.io/get-started/fundamentals/main-concepts'}],
+      video:[],
+      practice:`Run <code>pip install streamlit</code> locally (inside the virtual environment from Phase 0) and follow the official "Create an app" tutorial: load a CSV, add a chart, add a slider filter, and run it with <code>streamlit run app.py</code>.` },
+    { id:'p6c2', title:'Read your Databricks data into Streamlit',
+      reading:[{label:'Tutorial: Develop a Databricks app with Streamlit (official)', url:'https://docs.databricks.com/aws/en/dev-tools/databricks-apps/tutorial-streamlit'}],
+      video:[],
+      practice:`Using the Databricks SQL Connector for Python, point a Streamlit app at your Databricks SQL warehouse and render your Phase 5 summary table in <code>st.dataframe()</code>.` },
+    { id:'p6c7', title:'Cache your data reads with st.cache_data',
+      reading:[{label:'Caching overview (official Streamlit docs)', url:'https://docs.streamlit.io/develop/concepts/architecture/caching'}],
+      video:[],
+      practice:`Wrap your Databricks-reading function with <code>@st.cache_data(ttl=600)</code> and compare load time before and after on repeat interactions. Note in your Learning Log, in one sentence, why this matters for a dashboard that queries a shared SQL warehouse every time someone touches a filter.` },
+    { id:'p6c3', title:'Widgets & layout — the KPI cards and slicers a BI tool gives you for free',
+      reading:[], video:[],
+      practice:`Add <code>st.metric()</code> KPI cards for the 5 metrics you designed in Phase 4, a sidebar of filters with <code>st.selectbox</code> / <code>st.multiselect</code> / <code>st.date_input</code>, and lay your charts out with <code>st.columns()</code>.` },
+    { id:'p6c4', title:'Deploy your app — two ways',
+      reading:[{label:'Streamlit Community Cloud — get started (free hosting)', url:'https://docs.streamlit.io/deploy/streamlit-community-cloud/get-started'},{label:'Databricks Apps — overview', url:'https://docs.databricks.com/aws/en/dev-tools/databricks-apps/'}],
+      video:[],
+      practice:`Deploy the same app twice: once free and public on Streamlit Community Cloud (just needs a GitHub account), and once inside your Databricks workspace as a Databricks App. If you don't see Apps in the sidebar, ask your workspace admin to enable it — it runs on the same billed workspace compute you already use, no separate cost.` },
+    { id:'p6c5', title:'Plotly Dash — when you want more control',
+      reading:[{label:'Dash in 20 Minutes (official)', url:'https://dash.plotly.com/tutorial'}],
+      video:[],
+      practice:`Rebuild one page of your Streamlit app as a Dash app instead, using <code>dcc.Graph</code> and a callback to wire up a filter. Write two sentences in your Learning Log on when you'd reach for Streamlit versus Dash.` },
+    { id:'p6c6', title:'Mini-project — a stakeholder-ready Python dashboard',
+      reading:[], video:[],
+      practice:`Polish your app into something you'd actually hand to a manager: a KPI row, 3–4 filterable charts, consistent titles and spacing. Deploy it and paste the live link into your Learning Log.` }
+  ]
+},
+{ id:'p7', num:'07', title:'Capstone Projects', hours:20,
+  blurb:'Three portfolio-ready projects that combine everything — pick the ones most relevant to you, or do all three.',
+  cells:[
+    { id:'p7c1', title:'Capstone A — Sales & Profitability Pipeline',
+      reading:[], video:[],
+      practice:`Superstore or TPC-H data → a Databricks Delta pipeline → a Streamlit (or Dash) dashboard with at least 2 pages/tabs and one trend chart.` },
+    { id:'p7c2', title:'Capstone B — Budget / Expense Variance Tracker',
+      reading:[], video:[],
+      practice:`Find a finance-flavored dataset, or simulate one (budget vs. actual by department and month). Clean and analyze it in pandas or PySpark, then build a Streamlit app that flags variances past a threshold in red.` },
+    { id:'p7c3', title:'Capstone C (stretch) — ask your data with Genie',
+      reading:[], video:[],
+      practice:`Load a dataset into your personal Databricks Free Edition account (keep this separate from work data), set up a Genie room, and get it answering 5 natural-language questions correctly.` },
+    { id:'p7c4', title:'Package it for a portfolio',
+      reading:[], video:[],
+      practice:`For at least one capstone, write a short README — the question, the data, what you found — and link your live, deployed Streamlit Community Cloud app. A working URL beats a screenshot. Keep it under your personal Databricks Free Edition or GitHub account, so it's yours no matter where you work next.` }
+  ]
+},
+{ id:'p8', num:'08', title:'Bring It to Work', hours:6,
+  blurb:'The point of upskilling is using it Monday morning. This phase turns "I finished a course" into "I changed how I work."',
+  cells:[
+    { id:'p8c1', title:'Find your first real automation target',
+      reading:[], video:[],
+      practice:`Reread your Phase 0 Learning Log note. Pick one recurring manual report and sketch, on paper, how you'd rebuild it with what you know now.` },
+    { id:'p8c2', title:'A live app vs. a scheduled job — now build it',
+      reading:[], video:[],
+      practice:`For the target above, decide: a Streamlit/Dash app people open anytime, or a Databricks Job that runs on a schedule? Then actually build that path. Scheduled: set up a real job on your pipeline using what you learned in Phase 5 — pick a realistic time (e.g., daily at 7am) and confirm one successful run. Live app: make sure it's deployed (Phase 6), and note in your Learning Log who'd actually need the link.` },
+    { id:'p8c3', title:'Present it out loud',
+      reading:[], video:[],
+      practice:`Give your Phase 6 dashboard a 5-minute walkthrough, out loud, to yourself or a colleague, as if presenting it cold for the first time.` },
+    { id:'p8c4', title:'Where to go next (optional, mostly paid)',
+      reading:[], video:[],
+      practice:`Two certifications worth knowing about if you ever want the signal on a resume: Databricks Certified Data Analyst Associate, and Databricks Certified Associate Developer for Apache Spark. Study material is largely free through Databricks Academy; the exams themselves aren't. Neither is required to use what you've built here.` }
+  ]
+}
+];
+
+/* ---------------- state ---------------- */
+let progress = {};
+let expandedPhases = new Set();
+
+function pickInitialExpanded(){
+  for(const phase of COURSE){
+    const allDone = phase.cells.every(c => progress[c.id]);
+    if(!allDone){ expandedPhases.add(phase.id); return; }
+  }
+}
+
+/* ---------------- render ---------------- */
+function resourceRows(items, tag){
+  return items.map(r => `<div class="res"><span class="res-tag">${tag}</span><a href="${r.url}" target="_blank" rel="noopener noreferrer">${r.label}</a>${r.source ? ` <span class="res-source">— ${r.source}</span>` : ''}</div>`).join('');
+}
+
+function cellHTML(cell){
+  const done = !!progress[cell.id];
+  return `<article class="cell ${done ? 'done' : ''}" data-cell-id="${cell.id}">
+    <button class="gutter-btn" type="button" aria-label="${done ? 'Mark as not done' : 'Mark as done'}">In&nbsp;[<span class="mark">${done ? '✓' : '&nbsp;'}</span>]:</button>
+    <div class="cell-body">
+      <h3 class="cell-title">${cell.title}</h3>
+      ${cell.reading.length ? resourceRows(cell.reading, 'Read') : ''}
+      ${cell.video.length ? resourceRows(cell.video, 'Watch') : ''}
+      <p class="practice"><span class="practice-tag">Try it →</span>${cell.practice}</p>
+    </div>
+  </article>`;
+}
+
+function phaseHTML(phase){
+  const doneCount = phase.cells.filter(c => progress[c.id]).length;
+  const total = phase.cells.length;
+  const pct = total ? Math.round(doneCount/total*100) : 0;
+  const expanded = expandedPhases.has(phase.id);
+  return `<section class="phase" data-phase-id="${phase.id}">
+    <h2 class="phase-heading">
+      <button class="phase-head" type="button" aria-expanded="${expanded}">
+        <span class="phase-num">${phase.num}</span>
+        <span class="phase-title-text">${phase.title}</span>
+        <span class="phase-count">${doneCount}/${total}</span>
+        <span class="chevron">${expanded ? '▾' : '▸'}</span>
+      </button>
+    </h2>
+    <div class="phase-bar-track"><div class="phase-bar-fill" style="width:${pct}%"></div></div>
+    ${expanded ? `<div class="phase-body">
+      <p class="phase-blurb">${phase.blurb}</p>
+      <p class="phase-hours">~${phase.hours} hrs</p>
+      <div class="cells">${phase.cells.map(cellHTML).join('')}</div>
+    </div>` : ''}
+  </section>`;
+}
+
+function render(){
+  const allCells = COURSE.flatMap(p => p.cells);
+  const doneTotal = allCells.filter(c => progress[c.id]).length;
+  const totalCells = allCells.length;
+  const totalHours = COURSE.reduce((s,p) => s + p.hours, 0);
+  const pct = totalCells ? Math.round(doneTotal/totalCells*100) : 0;
+
+  document.getElementById('hero-stats').innerHTML =
+    `<span><b>${doneTotal} / ${totalCells}</b> complete</span>` +
+    `<span><b>${pct}%</b></span>` +
+    `<span>~<b>${totalHours}</b> hrs total</span>` +
+    `<span>flexible pace, 5–9 hrs/wk ≈ 4 months</span>`;
+  document.getElementById('hero-bar-fill').style.width = pct + '%';
+  document.getElementById('course-root').innerHTML = COURSE.map(phaseHTML).join('');
+}
+
+/* ---------------- events ---------------- */
+document.getElementById('course-root').addEventListener('click', (e) => {
+  const gBtn = e.target.closest('.gutter-btn');
+  if(gBtn){
+    const cellEl = gBtn.closest('.cell');
+    const id = cellEl.getAttribute('data-cell-id');
+    progress[id] = !progress[id];
+    render();
+    storageSet('progress', JSON.stringify(progress));
+    return;
+  }
+  const pHead = e.target.closest('.phase-head');
+  if(pHead){
+    const id = pHead.closest('.phase').getAttribute('data-phase-id');
+    if(expandedPhases.has(id)) expandedPhases.delete(id); else expandedPhases.add(id);
+    render();
+  }
+});
+
+const logArea = document.getElementById('learning-log');
+let logTimer = null;
+logArea.addEventListener('input', () => {
+  clearTimeout(logTimer);
+  logTimer = setTimeout(() => storageSet('learning-log', logArea.value), 700);
+});
+
+document.getElementById('reset-btn').addEventListener('click', async () => {
+  if(!confirm("Clear all progress and your learning log? This can't be undone.")) return;
+  progress = {};
+  logArea.value = '';
+  expandedPhases = new Set();
+  pickInitialExpanded();
+  render();
+  await storageSet('progress', JSON.stringify(progress));
+  await storageSet('learning-log', '');
+});
+
+/* ---------------- init ---------------- */
+async function init(){
+  try{
+    const p = await storageGet('progress');
+    progress = p ? JSON.parse(p) : {};
+  }catch(e){ progress = {}; }
+  try{
+    const l = await storageGet('learning-log');
+    logArea.value = l || '';
+  }catch(e){}
+  if(!hasClaudeStorage && !hasLocalStorage){
+    document.getElementById('storage-note').style.display = 'block';
+  }
+  pickInitialExpanded();
+  render();
+}
+init();
+</script>
+</body>
+</html>
