@@ -213,13 +213,17 @@ async function storageSet(key, value){
 
 /* ---------------- course data ---------------- */
 const COURSE = [
-{ id:'p0', num:'00', title:'Setup & Orientation', hours:5,
+{ id:'p0', num:'00', title:'Setup & Orientation', hours:6,
   blurb:'Get your accounts created, your Databricks workspace open, and Python + git installed locally. Everything later in this course builds on these first few hours.',
   cells:[
     { id:'p0c1', title:'Get oriented in your Databricks workspace',
       reading:[{label:'Free training & Databricks Academy access', url:'https://docs.databricks.com/aws/en/getting-started/free-training'}],
       video:[{label:'Databricks Academy — self-paced courses', url:'https://www.databricks.com/learn/training/home'}],
       practice:`Log in to the Databricks workspace your employer set up. Create a new notebook, run <code>print("hello")</code> in a Python cell, then run <code>SELECT * FROM samples.tpch.customer LIMIT 10;</code> in a SQL cell. Click through the Catalog panel once.` },
+    { id:'p0c5', title:'Get comfortable in the command line',
+      reading:[{label:'Command line crash course (official MDN)', url:'https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Environment_setup/Command_line'}],
+      video:[],
+      practice:`Open a terminal (Terminal on Mac, Command Prompt or PowerShell on Windows) and practice five commands: <code>pwd</code> (where am I), <code>ls</code> or <code>dir</code> (what's here), <code>cd foldername</code> (move into a folder), <code>cd ..</code> (move back up), and <code>mkdir foldername</code> (make a new folder). Once you install git in the next item, Windows users also get Git Bash, which uses the same <code>ls</code>/<code>cd</code>/<code>pwd</code> commands as Mac — most people find it simpler to just use that one from here on.` },
     { id:'p0c4', title:'Install Python + git locally, and create a GitHub account',
       reading:[{label:'Download Python (official)', url:'https://www.python.org/downloads/'},{label:'GitHub — Hello World guide (git + GitHub basics)', url:'https://docs.github.com/en/get-started/start-your-journey/hello-world'}],
       video:[],
@@ -321,7 +325,7 @@ const COURSE = [
       practice:`Turn your Phase 2 capstone dataset into one notebook page of 4–5 charts (mix matplotlib/seaborn and Plotly) that tell a clear story, each with a 2–3 sentence takeaway underneath.` }
   ]
 },
-{ id:'p4', num:'04', title:'Statistics & BI Analytics Thinking', hours:8,
+{ id:'p4', num:'04', title:'Statistics & BI Analytics Thinking', hours:10,
   blurb:'The tool doesn\u2019t matter if you\u2019re measuring the wrong thing. This phase is about picking the right metric.',
   cells:[
     { id:'p4c1', title:'Descriptive statistics that actually matter',
@@ -337,9 +341,13 @@ const COURSE = [
       reading:[{label:'Same course — A/B testing section', url:'https://www.freecodecamp.org/news/learn-python-for-data-science-hands-on-projects-with-eda-ab-testing-business-intelligence/'}],
       video:[],
       practice:`Watch the course's A/B test case study and summarize the hypothesis, result, and decision in 3 bullet points.` },
+    { id:'p4c7', title:'Simple trend forecasting',
+      reading:[{label:'numpy.polyfit (official documentation)', url:'https://numpy.org/doc/stable/reference/generated/numpy.polyfit.html'}],
+      video:[],
+      practice:`Using the monthly revenue series from Phase 2, fit a straight line through it with <code>np.polyfit(x, y, 1)</code> where <code>x</code> is a simple 0,1,2… month index. Use <code>np.poly1d()</code> on the result to project the next 3 months, then plot the actuals and the projection together. This one-liner is what sits behind most "projected" numbers on a finance dashboard — no separate forecasting library needed.` },
     { id:'p4c5', title:'Mini-project — a one-page insight memo',
       reading:[], video:[],
-      practice:`Using Phase 2–3 output, write a one-page memo as if it's going to your manager: headline finding, one supporting chart, one recommended action.` }
+      practice:`Using Phase 2–3 output (and your forecast from above, if it fits), write a one-page memo as if it's going to your manager: headline finding, one supporting chart, one recommended action.` }
   ]
 },
 { id:'p5', num:'05', title:'SQL, PySpark & the Databricks Platform', hours:21,
@@ -374,7 +382,7 @@ const COURSE = [
       practice:`Take your capstone dataset from raw upload through your Delta pipeline to a working Lakeview dashboard with at least 4 visuals.` }
   ]
 },
-{ id:'p6', num:'06', title:'Python-Native BI Dashboards: Streamlit & Dash', hours:18,
+{ id:'p6', num:'06', title:'Python-Native BI Dashboards: Streamlit & Dash', hours:19,
   blurb:'Build the same interactive dashboards Power BI or Tableau would give you — in nothing but Python.',
   cells:[
     { id:'p6c1', title:'Streamlit — your first data app',
@@ -392,6 +400,10 @@ const COURSE = [
     { id:'p6c3', title:'Widgets & layout — the KPI cards and slicers a BI tool gives you for free',
       reading:[], video:[],
       practice:`Add <code>st.metric()</code> KPI cards for the 5 metrics you designed in Phase 4, a sidebar of filters with <code>st.selectbox</code> / <code>st.multiselect</code> / <code>st.date_input</code>, and lay your charts out with <code>st.columns()</code>.` },
+    { id:'p6c9', title:'Pin your dependencies and hide your secrets',
+      reading:[{label:'App dependencies for Community Cloud (official)', url:'https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/app-dependencies'},{label:'Secrets management (official)', url:'https://docs.streamlit.io/develop/concepts/connections/secrets-management'}],
+      video:[],
+      practice:`Run <code>pip freeze > requirements.txt</code> in your project folder to capture every package your app needs. Then move your Databricks SQL warehouse hostname, HTTP path and access token out of your code and into <code>.streamlit/secrets.toml</code>, read them back with <code>st.secrets["..."]</code>, and add <code>.streamlit/secrets.toml</code> to a <code>.gitignore</code> file so it never gets pushed to GitHub.` },
     { id:'p6c4', title:'Deploy your app — two ways',
       reading:[{label:'Streamlit Community Cloud — get started (free hosting)', url:'https://docs.streamlit.io/deploy/streamlit-community-cloud/get-started'},{label:'Databricks Apps — overview', url:'https://docs.databricks.com/aws/en/dev-tools/databricks-apps/'}],
       video:[],
