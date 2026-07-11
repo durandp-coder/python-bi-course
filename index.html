@@ -113,6 +113,9 @@
   }
   .res-source{color:var(--text-faint);}
   .practice{font-size:.92rem; margin:.6rem 0 0; color:var(--text);}
+  .practice ol, .practice ul{margin:.5rem 0 0; padding-left:1.25rem;}
+  .practice li{margin:.32rem 0;}
+  .practice-note{color:var(--text-dim); font-size:.85rem; font-style:italic; display:block; margin-top:.55rem;}
   .practice-tag{font-family:var(--mono); color:var(--amber); font-size:.78rem; margin-right:.3rem;}
   .cell.done .practice-tag{color:var(--green);}
 
@@ -237,7 +240,7 @@ const COURSE = [
       practice:`Open the Learning Log at the bottom of this page and write 3–4 sentences: what you currently do in Excel or SQL at work, and which parts feel slow, manual, or error-prone. You'll come back to this note in Phase 8.` }
   ]
 },
-{ id:'p1', num:'01', title:'Python Foundations', hours:15,
+{ id:'p1', num:'01', title:'Python Foundations', hours:17,
   blurb:'The core language, with every concept anchored to something you already do in a spreadsheet or a query.',
   cells:[
     { id:'p1c1', title:'Variables, types & f-strings',
@@ -257,12 +260,21 @@ const COURSE = [
     { id:'p1c5', title:'Reading files & handling errors, the manual way',
       reading:[], video:[],
       practice:`Read a CSV with Python's built-in <code>csv</code> module — no pandas yet — and wrap the file read in a <code>try/except</code>. Notice how many lines this takes; Phase 2 cuts it to one.` },
+    { id:'p1c7', title:'Extra practice drills (optional reps)',
+      reading:[], video:[],
+      practice:`<span class="practice-note">Optional — extra reps if you want more before the mini-project.</span><ol>
+<li>Write a function that averages a list of numbers using only a loop — no <code>sum()</code> or built-in average.</li>
+<li>Given your list of order dictionaries, count how many are above the average value using only what you've learned so far.</li>
+<li>Write <code>fizz_business(n)</code>: print "Renew" for multiples of 3, "Upsell" for multiples of 5, "Renew Upsell" for both, otherwise just the number.</li>
+<li>Split a comma-separated string into a list and strip the whitespace from each item.</li>
+<li>Build a small "price × quantity" grid from two lists using a nested loop.</li>
+</ol>` },
     { id:'p1c6', title:'Mini-project — clean a messy CSV with plain Python',
       reading:[], video:[],
       practice:`Upload a small messy CSV to Databricks (blank cells, inconsistent capitalization, a couple of duplicate rows — a mock expense report works well) and clean it using only what you've learned so far. Keep the file; you'll redo this in Phase 2 to feel the difference pandas makes.` }
   ]
 },
-{ id:'p2', num:'02', title:'Pandas & NumPy', hours:23,
+{ id:'p2', num:'02', title:'Pandas & NumPy', hours:25,
   blurb:'This is where SQL fluency becomes a superpower. Every clause you already know gets a pandas name.',
   cells:[
     { id:'p2c1', title:'DataFrames = tables. Start here.',
@@ -297,13 +309,23 @@ const COURSE = [
       reading:[{label:'Kaggle Learn — Data Cleaning', url:'https://www.kaggle.com/learn/data-cleaning'}],
       video:[],
       practice:`Reopen your Phase 1 messy CSV and clean it again with <code>.dropna()</code>, <code>.fillna()</code>, <code>.drop_duplicates()</code> and <code>.str</code> methods. Compare the line count to your manual version.` },
+    { id:'p2c10', title:'Extra practice drills (optional reps)',
+      reading:[], video:[],
+      practice:`<span class="practice-note">Optional — extra reps if you want more before the mini-project.</span><ol>
+<li>Filter <code>samples.tpch.orders</code> to a single year and compute total revenue for it.</li>
+<li>Find the 5 highest-value customers using <code>.groupby()</code> + <code>.sort_values()</code>.</li>
+<li>Add a new column that's the ratio of two existing numeric columns.</li>
+<li>Force a column of numbers-stored-as-text to convert cleanly with <code>pd.to_numeric(errors='coerce')</code>.</li>
+<li>Use <code>merge(..., indicator=True)</code> to find rows in one table that don't exist in another.</li>
+<li>Write one filter with <code>.query()</code> and the same filter with boolean masking — decide which reads better to you.</li>
+</ol>` },
     { id:'p2c7', title:'Mini-project — business Q&A on a real dataset',
       reading:[{label:'Superstore dataset (Kaggle)', url:'https://www.kaggle.com/datasets/vivek468/superstore-dataset-final'}],
       video:[],
       practice:`Use the built-in TPC-H sample or download the Superstore dataset. Answer 8–10 business questions purely in pandas — top customers, slowest-moving categories, monthly revenue trend, region with declining margin. Save this notebook; you'll reuse the dataset through Phase 7.` }
   ]
 },
-{ id:'p3', num:'03', title:'Data Visualization in Python', hours:9,
+{ id:'p3', num:'03', title:'Data Visualization in Python', hours:11,
   blurb:'Turn Phase 2\u2019s tables into charts that make the answer obvious before anyone reads a number — ending in the interactive charts that power your Phase 6 dashboards.',
   cells:[
     { id:'p3c1', title:'matplotlib basics',
@@ -320,12 +342,20 @@ const COURSE = [
     { id:'p3c4', title:'Chart choice & design',
       reading:[], video:[],
       practice:`Take one chart from before and deliberately make a worse version — wrong chart type, 3D, a rainbow palette — then fix it. The contrast teaches more than either version alone.` },
+    { id:'p3c6', title:'Extra practice drills (optional reps)',
+      reading:[], video:[],
+      practice:`<span class="practice-note">Optional — extra reps if you want more before the mini-project.</span><ol>
+<li>Build a small-multiples chart — one subplot per category — with matplotlib.</li>
+<li>Build a stacked bar chart showing composition, e.g. revenue by category, stacked by region.</li>
+<li>Take a chart with no title, axis labels or legend and add all three properly.</li>
+<li>Rebuild one chart in both matplotlib and Plotly, and notice how much faster the second one felt.</li>
+</ol>` },
     { id:'p3c5', title:'Mini-project — a one-page visual summary',
       reading:[], video:[],
       practice:`Turn your Phase 2 capstone dataset into one notebook page of 4–5 charts (mix matplotlib/seaborn and Plotly) that tell a clear story, each with a 2–3 sentence takeaway underneath.` }
   ]
 },
-{ id:'p4', num:'04', title:'Statistics & BI Analytics Thinking', hours:10,
+{ id:'p4', num:'04', title:'Statistics & BI Analytics Thinking', hours:17,
   blurb:'The tool doesn\u2019t matter if you\u2019re measuring the wrong thing. This phase is about picking the right metric.',
   cells:[
     { id:'p4c1', title:'Descriptive statistics that actually matter',
@@ -341,16 +371,26 @@ const COURSE = [
       reading:[{label:'Same course — A/B testing section', url:'https://www.freecodecamp.org/news/learn-python-for-data-science-hands-on-projects-with-eda-ab-testing-business-intelligence/'}],
       video:[],
       practice:`Watch the course's A/B test case study and summarize the hypothesis, result, and decision in 3 bullet points.` },
+    { id:'p4c8', title:'Extra practice drills (optional reps)',
+      reading:[], video:[],
+      practice:`<span class="practice-note">Optional — extra reps if you want more before the mini-project.</span><ol>
+<li>Compare the standard deviation of two different segments — which is more volatile, and what does that mean for planning?</li>
+<li>For 2 of your KPIs, write down a specific number that counts as "good" and one that counts as "bad."</li>
+<li>Add one sentence to your forecast below explaining its biggest limitation — what could make it wrong?</li>
+</ol>` },
     { id:'p4c7', title:'Simple trend forecasting',
       reading:[{label:'numpy.polyfit (official documentation)', url:'https://numpy.org/doc/stable/reference/generated/numpy.polyfit.html'}],
       video:[],
       practice:`Using the monthly revenue series from Phase 2, fit a straight line through it with <code>np.polyfit(x, y, 1)</code> where <code>x</code> is a simple 0,1,2… month index. Use <code>np.poly1d()</code> on the result to project the next 3 months, then plot the actuals and the projection together. This one-liner is what sits behind most "projected" numbers on a finance dashboard — no separate forecasting library needed.` },
     { id:'p4c5', title:'Mini-project — a one-page insight memo',
       reading:[], video:[],
-      practice:`Using Phase 2–3 output (and your forecast from above, if it fits), write a one-page memo as if it's going to your manager: headline finding, one supporting chart, one recommended action.` }
+      practice:`Using Phase 2–3 output (and your forecast from above, if it fits), write a one-page memo as if it's going to your manager: headline finding, one supporting chart, one recommended action.` },
+    { id:'p4c9', title:'Checkpoint project — a second dataset, start to finish',
+      reading:[], video:[],
+      practice:`Pick a different dataset than the one you've used so far — a new Kaggle dataset in your finance/business-ops theme works well. Starting from a blank notebook, take it through everything from Phases 1–4 on your own: load and clean it, answer 5 business questions with pandas, build 3 charts, and write a one-page memo. No new concepts here — the point is running the whole cycle once, unaided, on data you haven't seen before.` }
   ]
 },
-{ id:'p5', num:'05', title:'SQL, PySpark & the Databricks Platform', hours:21,
+{ id:'p5', num:'05', title:'SQL, PySpark & the Databricks Platform', hours:23,
   blurb:'Where your SQL fluency scales up — same logic over distributed data, plus the native tools BI teams run on before any dashboard app gets involved.',
   cells:[
     { id:'p5c1', title:'PySpark DataFrames — pandas\u2019 bigger sibling',
@@ -377,12 +417,19 @@ const COURSE = [
       reading:[{label:'Databricks Certified Data Analyst Associate — free overview course', url:'https://www.databricks.com/learn/training/home'}],
       video:[],
       practice:`No task here — just note that the study material is free through Academy. Only the exam itself has a fee, if you decide to sit it later.` },
+    { id:'p5c8', title:'Extra practice drills (optional reps)',
+      reading:[], video:[],
+      practice:`<span class="practice-note">Optional — extra reps if you want more before the mini-project.</span><ol>
+<li>Write the same filter-and-aggregate as a <code>%sql</code> cell and as PySpark DataFrame code — notice which one you reached for first.</li>
+<li>Create a new Delta table that's a filtered subset of your summary table, e.g. this quarter only.</li>
+<li>Point your pipeline at a table that doesn't exist, on purpose, and read the full PySpark error message once end to end so it stops looking scary.</li>
+</ol>` },
     { id:'p5c6', title:'Mini-project — end-to-end pipeline + native dashboard',
       reading:[], video:[],
       practice:`Take your capstone dataset from raw upload through your Delta pipeline to a working Lakeview dashboard with at least 4 visuals.` }
   ]
 },
-{ id:'p6', num:'06', title:'Python-Native BI Dashboards: Streamlit & Dash', hours:19,
+{ id:'p6', num:'06', title:'Python-Native BI Dashboards: Streamlit & Dash', hours:21,
   blurb:'Build the same interactive dashboards Power BI or Tableau would give you — in nothing but Python.',
   cells:[
     { id:'p6c1', title:'Streamlit — your first data app',
@@ -412,6 +459,13 @@ const COURSE = [
       reading:[{label:'Dash in 20 Minutes (official)', url:'https://dash.plotly.com/tutorial'}],
       video:[],
       practice:`Rebuild one page of your Streamlit app as a Dash app instead, using <code>dcc.Graph</code> and a callback to wire up a filter. Write two sentences in your Learning Log on when you'd reach for Streamlit versus Dash.` },
+    { id:'p6c10', title:'Extra practice drills (optional reps)',
+      reading:[], video:[],
+      practice:`<span class="practice-note">Optional — extra reps if you want more before the mini-project.</span><ol>
+<li>Add a second page to your Streamlit app using <code>st.navigation</code> or a <code>pages/</code> folder.</li>
+<li>Add a download button (<code>st.download_button</code>) so viewers can export the filtered data as CSV.</li>
+<li>Drop your cache <code>ttl</code> to 5 seconds, watch it refetch on every interaction, then set it back to something sensible.</li>
+</ol>` },
     { id:'p6c6', title:'Mini-project — a stakeholder-ready Python dashboard',
       reading:[], video:[],
       practice:`Polish your app into something you'd actually hand to a manager: a KPI row, 3–4 filterable charts, consistent titles and spacing. Deploy it and paste the live link into your Learning Log.` }
@@ -477,7 +531,7 @@ function cellHTML(cell){
       <h3 class="cell-title">${cell.title}</h3>
       ${cell.reading.length ? resourceRows(cell.reading, 'Read') : ''}
       ${cell.video.length ? resourceRows(cell.video, 'Watch') : ''}
-      <p class="practice"><span class="practice-tag">Try it →</span>${cell.practice}</p>
+      <div class="practice"><span class="practice-tag">Try it →</span>${cell.practice}</div>
     </div>
   </article>`;
 }
@@ -516,7 +570,7 @@ function render(){
     `<span><b>${doneTotal} / ${totalCells}</b> complete</span>` +
     `<span><b>${pct}%</b></span>` +
     `<span>~<b>${totalHours}</b> hrs total</span>` +
-    `<span>flexible pace, 5–9 hrs/wk ≈ 4 months</span>`;
+    `<span>flexible pace, 5–9 hrs/wk ≈ 4–5 months with drills</span>`;
   document.getElementById('hero-bar-fill').style.width = pct + '%';
   document.getElementById('course-root').innerHTML = COURSE.map(phaseHTML).join('');
 }
